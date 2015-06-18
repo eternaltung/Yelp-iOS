@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Yelp-BDBOAuth1Manager.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Yelp-FlatUIKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,17 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>20A38D1C09461FF115D16F62</key>
+		<key>11481A5D261FD0D6CA615410</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>470B2213563BF50614FFECA7</key>
+		<key>39C30C7F562AEA0276391EDF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6CA934898DA18854FFE9A109</key>
+		<key>5C97E9BE044DC875A2C4918D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>66D79768123C6072A50486CB</key>
 		<dict>
 			<key>primary</key>
 			<true/>

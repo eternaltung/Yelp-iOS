@@ -5,5 +5,6 @@ target 'Yelp' do
 platform :ios, '8.0'
 pod 'AFNetworking'
 pod 'FlatUIKit'
+pod 'BDBOAuth1Manager'
 end
 
