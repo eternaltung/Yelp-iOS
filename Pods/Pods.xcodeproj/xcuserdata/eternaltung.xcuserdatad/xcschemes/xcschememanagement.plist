@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Yelp-MBProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Yelp.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -27,22 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>11481A5D261FD0D6CA615410</key>
+		<key>1045EB6746EB43E04BC822D7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>39C30C7F562AEA0276391EDF</key>
+		<key>54F20F770A99823C5280310D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5C97E9BE044DC875A2C4918D</key>
+		<key>7852B2FD440E3D03790F9443</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>66D79768123C6072A50486CB</key>
+		<key>F56CD8C7593679C8014A9E8F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FB49104631015CAB2FC763D4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
