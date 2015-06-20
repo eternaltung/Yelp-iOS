@@ -21,6 +21,7 @@
 		D9CB3E931B34497F008EE4F6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CB3E921B34497F008EE4F6 /* CoreLocation.framework */; };
 		D9CB3E961B344D6A008EE4F6 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CB3E951B344D6A008EE4F6 /* MapViewController.m */; };
 		D9CB3E981B3450BD008EE4F6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CB3E971B3450BD008EE4F6 /* MapKit.framework */; };
+		D9CB3E9B1B3484C3008EE4F6 /* MapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CB3E9A1B3484C3008EE4F6 /* MapAnnotation.m */; };
 		D9E8E2161B32DA8B0042F118 /* Business.m in Sources */ = {isa = PBXBuildFile; fileRef = D9E8E2151B32DA8B0042F118 /* Business.m */; };
 		D9E8E2191B32F2130042F118 /* YelpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D9E8E2181B32F2130042F118 /* YelpClient.m */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,8 @@
 		D9CB3E941B344D6A008EE4F6 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		D9CB3E951B344D6A008EE4F6 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		D9CB3E971B3450BD008EE4F6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		D9CB3E991B3484C3008EE4F6 /* MapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapAnnotation.h; sourceTree = "<group>"; };
+		D9CB3E9A1B3484C3008EE4F6 /* MapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapAnnotation.m; sourceTree = "<group>"; };
 		D9E8E2141B32DA8B0042F118 /* Business.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Business.h; sourceTree = "<group>"; };
 		D9E8E2151B32DA8B0042F118 /* Business.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Business.m; sourceTree = "<group>"; };
 		D9E8E2171B32F2130042F118 /* YelpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpClient.h; sourceTree = "<group>"; };
@@ -180,6 +183,8 @@
 				D9CB3E901B343615008EE4F6 /* DetailViewController.m */,
 				D9CB3E941B344D6A008EE4F6 /* MapViewController.h */,
 				D9CB3E951B344D6A008EE4F6 /* MapViewController.m */,
+				D9CB3E991B3484C3008EE4F6 /* MapAnnotation.h */,
+				D9CB3E9A1B3484C3008EE4F6 /* MapAnnotation.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -333,6 +338,7 @@
 			files = (
 				D94B32BE1B32C1B1001302C9 /* YelpTableController.m in Sources */,
 				D9E8E2161B32DA8B0042F118 /* Business.m in Sources */,
+				D9CB3E9B1B3484C3008EE4F6 /* MapAnnotation.m in Sources */,
 				D94B329C1B32C124001302C9 /* AppDelegate.m in Sources */,
 				D9CB3E961B344D6A008EE4F6 /* MapViewController.m in Sources */,
 				D9E8E2191B32F2130042F118 /* YelpClient.m in Sources */,

@@ -17,6 +17,7 @@
 @interface YelpTableController () <UISearchBarDelegate>
 @property (nonatomic, strong) YelpClient *client;
 @property (nonatomic,strong) NSArray *businessdatas;
+@property (nonatomic,strong) NSDictionary *region;
 @property (nonatomic,strong) UISearchBar *searchbar;
 @property(nonatomic, strong) UIBarButtonItem *filtersbutton;
 @end
@@ -54,6 +55,7 @@ NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
          businessdatas = [Business businessWithDict:response[@"businesses"]];
          [self.tableView reloadData];
          [MBProgressHUD hideHUDForView:self.view animated:YES];
+         self.region = response[@"region"];
      }
      failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
@@ -82,6 +84,7 @@ NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 - (void)mapButtonTap{
     MapViewController *mapview = [self.storyboard instantiateViewControllerWithIdentifier:@"MapView"];
     mapview.businessdatas = businessdatas;
+    mapview.region = self.region;
     [self showViewController:mapview sender:self];
     /*[UIView transitionWithView:self.view
                       duration:1.0

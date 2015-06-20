@@ -11,4 +11,5 @@
 @interface MapViewController : UIViewController
 
 @property (nonatomic,strong) NSArray *businessdatas;
+@property (nonatomic,strong) NSDictionary *region;
 @end
