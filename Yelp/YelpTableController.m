@@ -59,7 +59,7 @@ NSString * const tokensecret = @"";
     [params setValue:[self.defaults objectForKey:@"deals_filter"] forKey:@"deals_filter"];
     [params setValue:[self.defaults objectForKey:@"sort"] forKey:@"sort"];
     [params setValue:[self.defaults objectForKey:@"radius_filter"] forKey:@"radius_filter"];
-    NSLog(@"%@",params);
+    
     if (params)
     {
         [client searchWithTerm:[self.searchbar.text isEqualToString:@""] ? @"buffet" : self.searchbar.text ll:@"25.033493,121.564101" params:params success:^(AFHTTPRequestOperation *operation, id response)
@@ -85,7 +85,6 @@ NSString * const tokensecret = @"";
     self.searchbar = [[UISearchBar alloc] init];
     [self.searchbar setPlaceholder:@"search"];
     self.searchbar.delegate = self;
-    self.searchbar.showsCancelButton = YES;
     self.navigationItem.titleView = self.searchbar;
     
     //add map button
@@ -149,10 +148,14 @@ NSString * const tokensecret = @"";
 }
 
 #pragma mark - searchbar
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
+    [self.searchbar setShowsCancelButton:YES animated:NO];
+    return YES;
+}
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     [self.searchbar resignFirstResponder];
-    
+    [self.searchbar setShowsCancelButton:NO animated:YES];
     //scroll to top and then search
     [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
     [self searchForData];
@@ -160,6 +163,7 @@ NSString * const tokensecret = @"";
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
     [self.searchbar resignFirstResponder];
+    [self.searchbar setShowsCancelButton:NO animated:YES];
 }
 
 /*

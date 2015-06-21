@@ -240,6 +240,10 @@ NSString * const comboBoxidentifier = @"ComboBox";
     return self.sectionTitles[section];
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return section == 0 ? 35 : 20;
+}
+
 //filter cell delegate
 -(void)filtercell:(FilterCell *)filtercell isUpdate:(BOOL)value{
     NSIndexPath *index = [self.tableView indexPathForCell:filtercell];
