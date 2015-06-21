@@ -31,6 +31,48 @@
             </objects>
             <point key="canvasLocation" x="1395" y="741"/>
         </scene>
+        <!--Title-->
+        <scene sceneID="Cqo-ba-rvx">
+            <objects>
+                <viewController storyboardIdentifier="FilterView" modalTransitionStyle="partialCurl" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1dx-Pg-nmt" customClass="FilterViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rRx-nv-zky"/>
+                        <viewControllerLayoutGuide type="bottom" id="xtV-5y-v6f"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8nB-e4-p2g">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="szZ-NN-tC1">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="lA9-VF-lUh">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lA9-VF-lUh" id="y5C-Yr-Sw7">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="szZ-NN-tC1" firstAttribute="top" secondItem="8nB-e4-p2g" secondAttribute="top" id="0AG-gf-JsA"/>
+                            <constraint firstItem="xtV-5y-v6f" firstAttribute="top" secondItem="szZ-NN-tC1" secondAttribute="bottom" id="DuT-6B-9U3"/>
+                            <constraint firstItem="szZ-NN-tC1" firstAttribute="leading" secondItem="8nB-e4-p2g" secondAttribute="leading" id="Gwc-Ug-77Q"/>
+                            <constraint firstAttribute="trailing" secondItem="szZ-NN-tC1" secondAttribute="trailing" id="M7z-HK-n7S"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Title" id="SvC-Gl-h1b"/>
+                    <connections>
+                        <outlet property="tableView" destination="szZ-NN-tC1" id="rpc-ky-Yzk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kkr-ZD-DFA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1275" y="55"/>
+        </scene>
         <!--Map View Controller-->
         <scene sceneID="3ge-vi-3hv">
             <objects>
@@ -89,7 +131,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="2J4-1F-pZc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="1" green="0.17876405310875687" blue="0.25315350209471488" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="1" green="0.17876405309999999" blue="0.25315350209999998" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

@@ -15,9 +15,15 @@
               accessToken:(NSString *)accessToken
              accessSecret:(NSString *)accessSecret;
 
-- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term
+/*- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term
     ll:(NSString*)ll
     success:(void (^)(AFHTTPRequestOperation *operation, id response))success
-    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;*/
+
+- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term
+                                        ll:(NSString*)ll
+                                    params:(NSDictionary*)params
+                                   success:(void (^)(AFHTTPRequestOperation *operation, id response))success
+                                   failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 @end

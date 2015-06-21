@@ -13,21 +13,23 @@
 #import <MBProgressHUD.h>
 #import "MapViewController.h"
 #import "DetailViewController.h"
+#import "FilterViewController.h"
 
-@interface YelpTableController () <UISearchBarDelegate>
+@interface YelpTableController () <UISearchBarDelegate,FilterViewControllerDelegate>
 @property (nonatomic, strong) YelpClient *client;
 @property (nonatomic,strong) NSArray *businessdatas;
 @property (nonatomic,strong) NSDictionary *region;
 @property (nonatomic,strong) UISearchBar *searchbar;
 @property(nonatomic, strong) UIBarButtonItem *filtersbutton;
+@property NSUserDefaults *defaults;
 @end
 
 @implementation YelpTableController
 NSString * const reuseridentifier = @"Cell";
-NSString * const consumerkey = @"vxKwwcR_NMQ7WaEiQBK_CA";
-NSString * const consumersecret = @"33QCvh5bIF5jIHR5klQr7RtBDhQ";
-NSString * const token = @"uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV";
-NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
+NSString * const consumerkey = @"";
+NSString * const consumersecret = @"";
+NSString * const token = @"";
+NSString * const tokensecret = @"";
 
 @synthesize client;
 @synthesize businessdatas;
@@ -36,6 +38,7 @@ NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [super viewDidLoad];
     
     client = [[YelpClient alloc] initWithConsumerKey:consumerkey consumerSecret:consumersecret accessToken:token accessSecret:tokensecret];
+    self.defaults = [NSUserDefaults standardUserDefaults];
     
     //tableview row autoheight
     self.tableView.estimatedRowHeight = 150;
@@ -50,17 +53,31 @@ NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
 - (void)searchForData{
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [client searchWithTerm:[self.searchbar.text isEqualToString:@""] ? @"buffet" : self.searchbar.text ll:@"25.033493,121.564101" success:^(AFHTTPRequestOperation *operation, id response)
-     {
-         businessdatas = [Business businessWithDict:response[@"businesses"]];
-         [self.tableView reloadData];
-         [MBProgressHUD hideHUDForView:self.view animated:YES];
-         self.region = response[@"region"];
-     }
-     failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         [MBProgressHUD hideHUDForView:self.view animated:YES];
-     }];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setValue:[self.defaults objectForKey:@"category_filter"] forKey:@"category_filter"];
+    [params setValue:[self.defaults objectForKey:@"deals_filter"] forKey:@"deals_filter"];
+    [params setValue:[self.defaults objectForKey:@"sort"] forKey:@"sort"];
+    [params setValue:[self.defaults objectForKey:@"radius_filter"] forKey:@"radius_filter"];
+    NSLog(@"%@",params);
+    if (params)
+    {
+        [client searchWithTerm:[self.searchbar.text isEqualToString:@""] ? @"buffet" : self.searchbar.text ll:@"25.033493,121.564101" params:params success:^(AFHTTPRequestOperation *operation, id response)
+         {
+             [self successFetchData:response];
+         }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error)
+         {
+             [MBProgressHUD hideHUDForView:self.view animated:YES];
+         }];
+    }
+}
+
+-(void)successFetchData:(id)response{
+    businessdatas = [Business businessWithDict:response[@"businesses"]];
+    [self.tableView reloadData];
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    self.region = response[@"region"];
 }
 
 - (void)addNavigationBarUI{
@@ -76,8 +93,18 @@ NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     self.navigationItem.rightBarButtonItem = mapButton;
     
     //add filter button
-    UIBarButtonItem *filtersButton = [[UIBarButtonItem alloc] initWithTitle:@"filter" style:UIBarButtonItemStylePlain target:self action:nil];
+    UIBarButtonItem *filtersButton = [[UIBarButtonItem alloc] initWithTitle:@"filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonTap)];
     self.navigationItem.leftBarButtonItem = filtersButton;
+}
+
+//filter button tap
+- (void)filterButtonTap{
+    FilterViewController *filterview = [self.storyboard instantiateViewControllerWithIdentifier:@"FilterView"];
+    filterview.delegate = self;
+    
+    [UIView transitionFromView:self.view toView:filterview.view duration:0.8 options:UIViewAnimationOptionTransitionCurlDown completion:^(BOOL finished) {
+        [self showViewController:filterview sender:self];
+    }];
 }
 
 //map button tap
@@ -86,18 +113,15 @@ NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     mapview.businessdatas = businessdatas;
     mapview.region = self.region;
     [self showViewController:mapview sender:self];
-    /*[UIView transitionWithView:self.view
-                      duration:1.0
-                       options:self.isMapView ? UIViewAnimationOptionTransitionFlipFromTop :UIViewAnimationOptionTransitionFlipFromBottom
-                    animations:^{
-                        self.tableView.hidden = !self.isMapView;
-                        self.mapView.hidden = self.isMapView;
-                    } completion:nil
-     ];*/
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+//filter view delegate
+-(void)filterViewController:(FilterViewController *)filterViewController changedFilter:(NSDictionary *)filters{
+    [self searchForData];
 }
 
 #pragma mark - Table view data source
@@ -117,19 +141,18 @@ NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     return cell;
 }
 
+//select row and segue to detailview
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     DetailViewController *detailview = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailView"];
     detailview.business = businessdatas[indexPath.row];
     [self showViewController:detailview sender:self];
 }
 
-//searchbar
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    
-}
+#pragma mark - searchbar
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     [self.searchbar resignFirstResponder];
+    
     //scroll to top and then search
     [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
     [self searchForData];
@@ -138,40 +161,6 @@ NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
     [self.searchbar resignFirstResponder];
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation
