@@ -10,7 +10,7 @@
 
 @implementation Business
 
-+ (NSArray*)businessWithDict:(NSArray*)array{
++ (NSMutableArray*)businessWithDict:(NSArray*)array{
     NSMutableArray *returnarray = [NSMutableArray array];
     for (NSDictionary *dict in array) {
         Business *data = [[Business alloc] init];

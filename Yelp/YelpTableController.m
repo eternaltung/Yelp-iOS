@@ -14,22 +14,28 @@
 #import "MapViewController.h"
 #import "DetailViewController.h"
 #import "FilterViewController.h"
+#import <MapKit/MapKit.h>
 
-@interface YelpTableController () <UISearchBarDelegate,FilterViewControllerDelegate>
+@interface YelpTableController () <UISearchBarDelegate,FilterViewControllerDelegate,CLLocationManagerDelegate>
 @property (nonatomic, strong) YelpClient *client;
-@property (nonatomic,strong) NSArray *businessdatas;
+@property (nonatomic,strong) NSMutableArray *businessdatas;
 @property (nonatomic,strong) NSDictionary *region;
 @property (nonatomic,strong) UISearchBar *searchbar;
 @property(nonatomic, strong) UIBarButtonItem *filtersbutton;
 @property NSUserDefaults *defaults;
+@property (nonatomic, assign) BOOL isFetchingData;      //prevent for multiple call for data
+@property (nonatomic, assign) BOOL isInfiniteScroll;
+@property (nonatomic, assign) BOOL isEndofData;     //can get more data or not
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) CLLocation *userLocation;
 @end
 
 @implementation YelpTableController
 NSString * const reuseridentifier = @"Cell";
-NSString * const consumerkey = @"";
-NSString * const consumersecret = @"";
-NSString * const token = @"";
-NSString * const tokensecret = @"";
+NSString * const consumerkey = @"vxKwwcR_NMQ7WaEiQBK_CA";
+NSString * const consumersecret = @"33QCvh5bIF5jIHR5klQr7RtBDhQ";
+NSString * const token = @"uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV";
+NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
 @synthesize client;
 @synthesize businessdatas;
@@ -39,6 +45,9 @@ NSString * const tokensecret = @"";
     
     client = [[YelpClient alloc] initWithConsumerKey:consumerkey consumerSecret:consumersecret accessToken:token accessSecret:tokensecret];
     self.defaults = [NSUserDefaults standardUserDefaults];
+    self.isFetchingData = NO;
+    self.isInfiniteScroll = NO;
+    self.isEndofData = NO;
     
     //tableview row autoheight
     self.tableView.estimatedRowHeight = 150;
@@ -47,43 +56,103 @@ NSString * const tokensecret = @"";
     [self.tableView registerNib:[UINib nibWithNibName:@"BusinessCell" bundle:nil] forCellReuseIdentifier:reuseridentifier];
     
     [self addNavigationBarUI];
-    [self searchForData];
-    self.searchbar.text = @"buffet";
+    [self addRefreshViewController];
+    [self getUserLocation];
 }
 
-- (void)searchForData{
+- (void)getUserLocation{
+    //start tracking location
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+
+//location update
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    self.userLocation = [locations lastObject];
+    [manager stopUpdatingLocation];
+    [self searchForData:0];
+}
+
+- (void)addRefreshViewController{
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"pull to refresh"];
+    [self.refreshControl addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)refreshAction{
+    [self searchForData:0];
+}
+
+- (void)searchForData:(int)offset{
+    if (self.isFetchingData)
+        return;
     
+    //update refresh control last update time
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM d, h:mm a"];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Last update: %@",[formatter stringFromDate:[NSDate date]]]];
+    
+    //prepare all query param
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:[self.defaults objectForKey:@"category_filter"] forKey:@"category_filter"];
     [params setValue:[self.defaults objectForKey:@"deals_filter"] forKey:@"deals_filter"];
     [params setValue:[self.defaults objectForKey:@"sort"] forKey:@"sort"];
     [params setValue:[self.defaults objectForKey:@"radius_filter"] forKey:@"radius_filter"];
+    [params setValue:[NSNumber numberWithInt:offset] forKey:@"offset"];
     
-    if (params)
-    {
-        [client searchWithTerm:[self.searchbar.text isEqualToString:@""] ? @"buffet" : self.searchbar.text ll:@"25.033493,121.564101" params:params success:^(AFHTTPRequestOperation *operation, id response)
-         {
-             [self successFetchData:response];
-         }
-         failure:^(AFHTTPRequestOperation *operation, NSError *error)
-         {
-             [MBProgressHUD hideHUDForView:self.view animated:YES];
-         }];
-    }
+    self.isFetchingData = YES;
+    self.tableView.tableHeaderView = nil;
+    [client searchWithTerm:[self.searchbar.text isEqualToString:@""] ? @"buffet" : self.searchbar.text ll:[NSString stringWithFormat:@"%f,%f",self.userLocation.coordinate.latitude,self.userLocation.coordinate.longitude] params:params success:^(AFHTTPRequestOperation *operation, id response)
+     {
+         [self successFetchData:response];
+     }
+                   failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [MBProgressHUD hideHUDForView:self.view animated:YES];
+         [self.refreshControl endRefreshing];
+         self.isFetchingData = NO;
+     }];
 }
 
+//get data successful
 -(void)successFetchData:(id)response{
-    businessdatas = [Business businessWithDict:response[@"businesses"]];
+    [self.refreshControl endRefreshing];
+    NSMutableArray *newBusiness = [Business businessWithDict:response[@"businesses"]];
+    if (self.isInfiniteScroll)
+    {
+        [businessdatas addObjectsFromArray:newBusiness];
+    }
+    else
+        businessdatas = newBusiness;
+    
     [self.tableView reloadData];
+    
+    //if category is not null create categories header
+    if ([self.defaults objectForKey:@"category_filter"]) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 25)];
+        view.backgroundColor = [UIColor colorWithRed:0.96 green:0.8 blue:0.8 alpha:0.3];
+        UILabel *categoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 25)];
+        categoryLabel.text = [NSString stringWithFormat:@"Category: %@",[self.defaults objectForKey:@"category_filter"]];
+        categoryLabel.textAlignment = NSTextAlignmentCenter;
+        [view addSubview:categoryLabel];
+        self.tableView.tableHeaderView = view;
+    }
+    
+    self.isEndofData = newBusiness.count < 20 ? true : false;
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     self.region = response[@"region"];
+    self.isFetchingData = NO;
+    self.isInfiniteScroll = NO;
 }
 
 - (void)addNavigationBarUI{
     //add searchbar
     self.searchbar = [[UISearchBar alloc] init];
     [self.searchbar setPlaceholder:@"search"];
+    self.searchbar.text = @"buffet";
     self.searchbar.delegate = self;
     self.navigationItem.titleView = self.searchbar;
     
@@ -92,7 +161,7 @@ NSString * const tokensecret = @"";
     self.navigationItem.rightBarButtonItem = mapButton;
     
     //add filter button
-    UIBarButtonItem *filtersButton = [[UIBarButtonItem alloc] initWithTitle:@"filter" style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonTap)];
+    UIBarButtonItem *filtersButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Filter.png"] style:UIBarButtonItemStylePlain target:self action:@selector(filterButtonTap)];
     self.navigationItem.leftBarButtonItem = filtersButton;
 }
 
@@ -120,7 +189,8 @@ NSString * const tokensecret = @"";
 
 //filter view delegate
 -(void)filterViewController:(FilterViewController *)filterViewController changedFilter:(NSDictionary *)filters{
-    [self searchForData];
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self searchForData:0];
 }
 
 #pragma mark - Table view data source
@@ -137,6 +207,11 @@ NSString * const tokensecret = @"";
     BusinessCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseridentifier];
     cell.business = businessdatas[indexPath.row];
     
+    if ((indexPath.row + 1) == businessdatas.count && !self.isEndofData)
+    {   //infinte loading
+        self.isInfiniteScroll = YES;
+        [self searchForData:(int)businessdatas.count];
+    }
     return cell;
 }
 
@@ -158,7 +233,8 @@ NSString * const tokensecret = @"";
     [self.searchbar setShowsCancelButton:NO animated:YES];
     //scroll to top and then search
     [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
-    [self searchForData];
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self searchForData:0];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{

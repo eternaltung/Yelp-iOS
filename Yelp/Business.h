@@ -19,6 +19,6 @@
 @property (nonatomic, assign) float latitude;
 @property (nonatomic, assign) float longitude;
 
-+ (NSArray*)businessWithDict:(NSArray*)array;
++ (NSMutableArray*)businessWithDict:(NSArray*)array;
 
 @end

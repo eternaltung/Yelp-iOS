@@ -28,10 +28,10 @@
     [self addMapAnnotation];
     
     //start tracking location
-    self.locationManager = [[CLLocationManager alloc] init];
+    /*self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     [self.locationManager requestAlwaysAuthorization];
-    [self.locationManager startUpdatingLocation];
+    [self.locationManager startUpdatingLocation];*/
     
     [self setMapRegion];
 }
@@ -54,7 +54,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     //CLLocation *currentLocation = [locations lastObject];
-    [manager stopUpdatingLocation];
+    //[manager stopUpdatingLocation];
     
     //[self.map setCenterCoordinate:currentLocation.coordinate animated:YES];
 }

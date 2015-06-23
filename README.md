@@ -26,7 +26,7 @@ Time spent:
 ## Optional
 
 - [x] Search results page
-   - [ ] Infinite scroll for restaurant results
+   - [x] Infinite scroll for restaurant results
    - [x] Implement map view of restaurant results
 - [x] Filter page
    - [x] Radius filter should expand as in the real Yelp app
@@ -35,5 +35,13 @@ Time spent:
 
 ### Walkthrough
 
-![Video Walkthrough](...)
+![Video Walkthrough](Demo.gif)
+
+Credits
+---------
+* [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api)
+* [AFNetworking](https://github.com/AFNetworking/AFNetworking)
+* [BDBOAuth1Manager](https://github.com/bdbergeron/BDBOAuth1Manager)
+* [MBProgressHUD](https://github.com/jdg/MBProgressHUD)
+* [FlatUIKit](https://github.com/Grouper/FlatUIKit)
 

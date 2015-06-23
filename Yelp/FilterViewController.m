@@ -111,6 +111,7 @@ NSString * const comboBoxidentifier = @"ComboBox";
         [self.defaults setObject:nil forKey:@"category_filter"];
         [self.delegate filterViewController:self changedFilter:nil];
     }
+    [self.defaults synchronize];
 }
 
 - (void)didReceiveMemoryWarning {

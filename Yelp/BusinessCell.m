@@ -28,6 +28,12 @@
     self.ThumbImg.layer.cornerRadius = 5;
 }
 
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    
+    self.NameLabel.preferredMaxLayoutWidth = self.NameLabel.frame.size.width;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
