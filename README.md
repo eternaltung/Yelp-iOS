@@ -6,11 +6,14 @@ Time spent: 12hr
 
 ## Steps to run
 
-- Open the project with Xcode and add your keys at the YelpTableController.m.
+- Open the project with Xcode and add your Yelp keys at the YelpTableController.m.
+- Add your google map key in didFinishLaunchingWithOptions function at the AppDelegate.m.
 
-### Features
+<br />
+## Features
+***
 
-## Required
+### Required
 
 - [x] Search results page
    - [x] Table rows should be dynamic height according to the content height
@@ -23,7 +26,7 @@ Time spent: 12hr
    - [x] Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings.
    - [x] Display some of the available Yelp categories (choose any 3-4 that you want).
 
-## Optional
+### Optional
 
 - [x] Search results page
    - [x] Infinite scroll for restaurant results
@@ -32,16 +35,18 @@ Time spent: 12hr
    - [x] Radius filter should expand as in the real Yelp app
    - [x] Categories should show a subset of the full list with a "See All" row to expand. Category list is here: http://www.yelp.com/developers/documentation/category_list (Links to an external site.)
 - [x] Implement the restaurant detail page.
+- [x] the datail view uses Google map as the map service
 
 ### Walkthrough
 
 ![Video Walkthrough](Demo.gif)
 
-Credits
+## Credits
 ---------
 * [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api)
 * [AFNetworking](https://github.com/AFNetworking/AFNetworking)
 * [BDBOAuth1Manager](https://github.com/bdbergeron/BDBOAuth1Manager)
 * [MBProgressHUD](https://github.com/jdg/MBProgressHUD)
 * [FlatUIKit](https://github.com/Grouper/FlatUIKit)
+* [Google Map](https://developers.google.com/maps/documentation/ios/intro)
 

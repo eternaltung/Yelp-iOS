@@ -63,6 +63,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "FlatUIKit/Resources/Lato-Italic.ttf"
   install_resource "FlatUIKit/Resources/Lato-Light.ttf"
   install_resource "FlatUIKit/Resources/Lato-Regular.ttf"
+  install_resource "GoogleMaps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "FlatUIKit/Resources/flat-ui-icons-regular.ttf"
@@ -70,6 +71,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "FlatUIKit/Resources/Lato-Italic.ttf"
   install_resource "FlatUIKit/Resources/Lato-Light.ttf"
   install_resource "FlatUIKit/Resources/Lato-Regular.ttf"
+  install_resource "GoogleMaps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"
 fi
 
 rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <GoogleMaps/GoogleMaps.h>
 
 @interface AppDelegate ()
 
@@ -16,7 +17,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    //change navigation bar theme
     [[UINavigationBar appearance] setBarTintColor:[UIColor redColor]];
+    //app google map api key
+    [GMSServices provideAPIKey:@"add your key here"];
     return YES;
 }
 

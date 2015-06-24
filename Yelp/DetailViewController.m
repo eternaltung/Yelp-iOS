@@ -14,9 +14,10 @@
 #import <UIColor+FlatUI.h>
 #import <FUIButton.h>
 #import <UIFont+FlatUI.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 @interface DetailViewController () <MKMapViewDelegate,CLLocationManagerDelegate>
-@property (weak, nonatomic) IBOutlet MKMapView *map;
+@property (weak, nonatomic) IBOutlet UIView *mapview;
 @property (weak, nonatomic) IBOutlet UIImageView *BGImg;
 @property (weak, nonatomic) IBOutlet UIImageView *RatingImg;
 @property (weak, nonatomic) IBOutlet UILabel *TitleLabel;
@@ -33,7 +34,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.map.delegate = self;
+    
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     [self.locationManager requestAlwaysAuthorization];
@@ -46,10 +47,21 @@
     [self.BGImg setImageWithURL:[NSURL URLWithString:business.thumbimg]];
     [self.RatingImg setImageWithURL:[NSURL URLWithString:business.ratingimg]];
     
-    MapAnnotation *annotation = [[MapAnnotation alloc] initWithLocation:business];
-    [self.map addAnnotation:annotation];
-    [self.map setCenterCoordinate:CLLocationCoordinate2DMake(business.latitude, business.longitude) animated:YES];
-    [self.map setRegion:MKCoordinateRegionMake(CLLocationCoordinate2DMake(business.latitude, business.longitude), MKCoordinateSpanMake(0.005, 0.005)) animated:YES];
+    //add google map
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:business.latitude longitude:business.longitude zoom:13];
+    GMSMapView *map = [GMSMapView mapWithFrame:self.mapview.bounds camera:camera];
+    map.myLocationEnabled = YES;
+    map.settings.myLocationButton = YES;
+    map.settings.compassButton = YES;
+    [self.mapview addSubview:map];
+    
+    // create a marker 
+    GMSMarker *marker = [[GMSMarker alloc] init];
+    marker.position = CLLocationCoordinate2DMake(business.latitude, business.longitude);
+    marker.title = business.name;
+    marker.snippet = business.address;
+    marker.appearAnimation = kGMSMarkerAnimationPop;
+    marker.map = map;
     
     self.TitleLabel.text = business.name;
     self.ReviewLabel.text = [NSString stringWithFormat:@"%d Reviews",business.reviews];

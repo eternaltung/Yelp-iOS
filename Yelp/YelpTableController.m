@@ -32,10 +32,10 @@
 
 @implementation YelpTableController
 NSString * const reuseridentifier = @"Cell";
-NSString * const consumerkey = @"vxKwwcR_NMQ7WaEiQBK_CA";
-NSString * const consumersecret = @"33QCvh5bIF5jIHR5klQr7RtBDhQ";
-NSString * const token = @"uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV";
-NSString * const tokensecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
+NSString * const consumerkey = @"";
+NSString * const consumersecret = @"";
+NSString * const token = @"";
+NSString * const tokensecret = @"";
 
 @synthesize client;
 @synthesize businessdatas;

@@ -6,5 +6,6 @@ pod 'AFNetworking'
 pod 'BDBOAuth1Manager'
 pod 'MBProgressHUD'
 pod 'FlatUIKit'
+pod 'GoogleMaps'
 end
 
